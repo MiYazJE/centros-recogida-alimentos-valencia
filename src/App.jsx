@@ -3,7 +3,7 @@ import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { Main } from './components/Main';
 import { useSites } from './hooks/useSites';
 
-const INITIAL_CORDS = [39.39928, -0.568566];
+const INITIAL_CORDS = [39.4333300, -0.4166700];
 
 function App() {
   const query = useSites();
@@ -13,7 +13,7 @@ function App() {
       <Main />
       <MapContainer
         center={INITIAL_CORDS}
-        zoom={9}
+        zoom={12}
         zoomControl={true}
         scrollWheelZoom={true}
         className="h-96 w-full"

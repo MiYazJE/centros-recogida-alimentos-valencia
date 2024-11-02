@@ -1,9 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  darkMode: ["class"],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       fontFamily: {
@@ -11,12 +9,17 @@ export default {
           '"Inter var", sans-serif',
           {
             fontFeatureSettings: '"cv11", "ss01"',
-            fontVariationSettings: '"opsz" 32'
+            fontVariationSettings: '"opsz" 32',
           },
         ],
-      }
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+      colors: {},
     },
   },
-  plugins: [],
-}
-
+  plugins: [require("tailwindcss-animate")],
+};
