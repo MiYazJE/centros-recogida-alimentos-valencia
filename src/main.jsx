@@ -6,6 +6,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import './index.css';
 import 'leaflet/dist/leaflet.css';
+import './services/supabase.js';
 
 const client = new QueryClient();
 
