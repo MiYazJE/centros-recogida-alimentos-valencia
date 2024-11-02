@@ -37,7 +37,7 @@ export const MapLogic = ({ setIsSelecting, isSelecting }) => {
   }, [selectedPosition, map]);
 
   const handleCreateNewSite = (site) => {
-    mutation.mutate(site);
+    mutation.mutate({ ...site, location: selectedPosition });
   };
 
   return (
