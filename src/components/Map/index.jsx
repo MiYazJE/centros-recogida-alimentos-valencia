@@ -1,31 +1,29 @@
-import { useSites } from '@/hooks/useSites';
-import { useEffect, useRef, useState } from 'react';
 import { Marker, Popup, TileLayer, useMap, useMapEvents } from 'react-leaflet';
 import NewSiteForm from '../NewSiteForm';
+import { useState, useRef, useEffect } from 'react';
+import { useSites } from '@/hooks/useSites';
 
 export const MapLogic = ({ isSelecting }) => {
   const query = useSites();
   const map = useMap();
 
-  const [selectedPosition, setSelectedPosition] = useState(null);
+  const [selectedPosition, setSelectedPosition] = useState({ lat: 0, lng: 0 });
   const popupRef = useRef();
 
-  // Este componente maneja el clic en el mapa
   const MapClickHandler = () => {
     useMapEvents({
       click(e) {
-        console.log(e);
-        setSelectedPosition(e.latlng); // Guarda la posición seleccionada
+        setSelectedPosition(e.latlng);
       },
     });
     return null; // No renderiza nada
   };
 
-  if (popupRef?.current) {
-    popupRef.current.openOn?.(map);
-  }
-
-  console.log(popupRef.current);
+  useEffect(() => {
+    if (selectedPosition && popupRef.current) {
+      popupRef.current.openOn(map);
+    }
+  }, [selectedPosition, map]);
 
   return (
     <>

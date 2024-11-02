@@ -3,7 +3,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
+} from "@/components/ui/accordion";
 
 const FAQ_ITEMS = [
   {
@@ -33,20 +33,20 @@ const FAQ_ITEMS = [
 
 export const Faq = () => {
   return (
-    <Accordion
-      type="single"
-      collapsible
-    >
-      {FAQ_ITEMS.map((item, index) => (
-        <AccordionItem key={index} value={index.toString()} >
-          <AccordionTrigger>
-            <h3>{item.question}</h3>
-          </AccordionTrigger>
-          <AccordionContent>
-            <p>{item.answer}</p>
-          </AccordionContent>
-        </AccordionItem>
-      ))}
-    </Accordion>
-  )
-}
+    <div className="px-4 mx-auto max-w-screen-sm py-8 md:px-8 space-y-3">
+      <h2 className="text-xl text-center">Preguntas Frecuentes</h2>
+      <Accordion
+        className="space-y-2"
+        type="single"
+        collapsible
+      >
+        {FAQ_ITEMS.map((item, index) => (
+          <AccordionItem key={index} value={index.toString()}>
+            <AccordionTrigger className="font-bold">{item.question}</AccordionTrigger>
+            <AccordionContent>{item.answer}</AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
+    </div>
+  );
+};
