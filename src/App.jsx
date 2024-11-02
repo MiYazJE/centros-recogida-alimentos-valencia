@@ -1,43 +1,37 @@
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import { MapContainer } from 'react-leaflet';
 
+import { useState } from 'react';
+import LoadingButton from './components/LoadingButton';
 import { Main } from './components/Main';
-import { useSites } from './hooks/useSites';
+import { MapLogic } from './components/Map';
 
-const INITIAL_CORDS = [39.4333300, -0.4166700];
+const INITIAL_CORDS = [39.43333, -0.41667];
 
 function App() {
-  const query = useSites();
+  const [isSelecting, setIsSelecting] = useState(false);
 
   return (
     <div className="container mx-auto md:p-4">
       <Main />
+      <div className="flex place-content-end w-full py-3">
+        <LoadingButton
+          variant={isSelecting ? 'outline' : undefined}
+          onClick={() => setIsSelecting((prev) => !prev)}
+          loading={isSelecting}
+        >
+          {!isSelecting
+            ? '+ Añade un punto de recogida'
+            : 'Selecciona un punto en el mapa'}
+        </LoadingButton>
+      </div>
       <MapContainer
         center={INITIAL_CORDS}
         zoom={12}
         zoomControl={true}
         scrollWheelZoom={true}
-        className="h-96 w-full"
+        className="h-96 w-full z-10"
       >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        {query.data?.map((marker) => (
-          <Marker
-            key={marker.id}
-            position={[marker.location.lat, marker.location.lon]}
-          >
-            <Popup>
-              <h2 className="font-bold">{marker.title}</h2>
-              <p>{marker.address}</p>
-              {marker?.hours?.trim() ? (
-                <p>
-                  <strong>Horario:</strong> {marker?.hours?.trim()}
-                </p>
-              ) : null}
-            </Popup>
-          </Marker>
-        ))}
+        <MapLogic isSelecting={isSelecting} />
       </MapContainer>
     </div>
   );
