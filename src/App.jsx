@@ -9,7 +9,7 @@ function App() {
   const query = useSites();
 
   return (
-    <div className='container mx-auto md:p-4'>
+    <div className="container mx-auto md:p-4">
       <Main />
       <MapContainer
         center={INITIAL_CORDS}
@@ -22,14 +22,19 @@ function App() {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {query.data?.map((marker, index) => (
-          <Marker key={index} position={marker.position}>
+        {query.data?.map((marker) => (
+          <Marker
+            key={marker.id}
+            position={[marker.location.lat, marker.location.lon]}
+          >
             <Popup>
               <h2 className="font-bold">{marker.title}</h2>
               <p>{marker.address}</p>
-              <p>
-                <strong>Horario:</strong> {marker.hours}
-              </p>
+              {marker?.hours?.trim() ? (
+                <p>
+                  <strong>Horario:</strong> {marker?.hours?.trim()}
+                </p>
+              ) : null}
             </Popup>
           </Marker>
         ))}

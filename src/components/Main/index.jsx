@@ -13,7 +13,7 @@ export const Main = () => {
         </h2>
       </span>
       <article className="flex flex-col gap-2">
-        <h2 className="text-2xl">¿Cómo puedes ayudar?</h2>
+        <h2 className="text-xl">¿Cómo puedes ayudar?</h2>
         <p>
           Con esta plataforma, puedes conocer los puntos de recogida de
           alimentos y donaciones para ayudar a los afectados por las
@@ -21,7 +21,7 @@ export const Main = () => {
           sobre los lugares, horarios, y productos más necesarios para facilitar
           las donaciones y apoyo a las comunidades.
         </p>
-        <h2 className="text-2xl">¿Qué encontrarás en esta página?</h2>
+        <h2 className="md:text-xl">¿Qué encontrarás en esta página?</h2>
         <p>Aquí podrás encontrar:</p>
         <ul className="list-disc list-inside space-y-2 text-gray-700">
           <li>
