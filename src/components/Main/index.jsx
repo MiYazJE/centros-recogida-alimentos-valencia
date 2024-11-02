@@ -1,3 +1,5 @@
+import { Faq } from "./Faq";
+
 export const Main = () => {
   return (
     <main className="flex flex-col p-6 gap-6">
@@ -12,33 +14,11 @@ export const Main = () => {
           Ayuda para Afectados por las Inundaciones
         </h2>
       </span>
-      <article className="flex flex-col gap-2">
-        <h2 className="text-xl">¿Cómo puedes ayudar?</h2>
-        <p>
-          Con esta plataforma, puedes conocer los puntos de recogida de
-          alimentos y donaciones para ayudar a los afectados por las
-          inundaciones en Valencia. Actualizamos regularmente la información
-          sobre los lugares, horarios, y productos más necesarios para facilitar
-          las donaciones y apoyo a las comunidades.
-        </p>
-        <h2 className="md:text-xl">¿Qué encontrarás en esta página?</h2>
-        <p>Aquí podrás encontrar:</p>
-        <ul className="list-disc list-inside space-y-2 text-gray-700">
-          <li>
-            <span className="underline font-bold">Direcciones</span> de los
-            puntos de recogida de alimentos y otros insumos.
-          </li>
-          <li>
-            <span className="underline font-bold">
-              Horarios de funcionamiento
-            </span>{' '}
-            para que puedas acudir en el momento adecuado.
-          </li>
-          <li>
-            <span className="underline font-bold">Recomendaciones</span> sobre
-            los productos que más se necesitan.
-          </li>
-        </ul>
+      <article className="flex flex-col gap-2 justify-center">
+        <h2 className="text-xl">Preguntas Frecuentes</h2>
+        <div className="space-y-6">
+          <Faq />
+        </div>
       </article>
     </main>
   );
