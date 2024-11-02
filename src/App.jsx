@@ -9,12 +9,13 @@ function App() {
   const query = useSites();
 
   return (
-    <>
+    <div className='container mx-auto md:p-4'>
       <Main />
       <MapContainer
         center={INITIAL_CORDS}
         zoom={9}
-        scrollWheelZoom={false}
+        zoomControl={true}
+        scrollWheelZoom={true}
         className="h-96 w-full"
       >
         <TileLayer
@@ -33,7 +34,7 @@ function App() {
           </Marker>
         ))}
       </MapContainer>
-    </>
+    </div>
   );
 }
 
