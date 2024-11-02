@@ -1,14 +1,6 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from '@/components/ui/dialog';
 import { useForm } from 'react-hook-form';
 import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import {
   Form,
@@ -20,26 +12,25 @@ import {
   FormMessage,
 } from '../ui/form';
 import { Textarea } from '../ui/textarea';
+import LoadingButton from '../LoadingButton';
 
 const schema = z.object({
-  title: z.string({ message: 'Este campo es requerido' }),
+  title: z
+    .string({ message: 'Este campo es requerido' })
+    .min(1, { message: 'Este campo es requerido' }),
   address: z.string().default(''),
   hours: z.string().default('-'),
 });
 
-const NewSiteForm = () => {
+const NewSiteForm = ({ onSubmit, loading }) => {
   const form = useForm({
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
-  };
-
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
           <FormField
             control={form.control}
             name="title"
@@ -47,7 +38,7 @@ const NewSiteForm = () => {
               <FormItem>
                 <FormLabel>Título</FormLabel>
                 <FormControl>
-                  <Input placeholder="Título" {...field} />
+                  <Input className="!mt-0" placeholder="Título" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -56,12 +47,15 @@ const NewSiteForm = () => {
           <FormField
             control={form.control}
             name="address"
-            className="space-y-1"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Dirección</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Dirección" {...field} />
+                  <Textarea
+                    className="!mt-0"
+                    placeholder="Dirección"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -70,12 +64,11 @@ const NewSiteForm = () => {
           <FormField
             control={form.control}
             name="hours"
-            className="space-y-1"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Horario</FormLabel>
                 <FormControl>
-                  <Input placeholder="Horario" {...field} />
+                  <Input className="!mt-0" placeholder="Horario" {...field} />
                 </FormControl>
                 <FormDescription>
                   Ejemplos: "08:30 - 18:00", "Todo el día", etc...
@@ -86,9 +79,16 @@ const NewSiteForm = () => {
           />
         </form>
       </Form>
-      <Button type="submit" onClick={form.handleSubmit(onSubmit)}>
-        Crear
-      </Button>
+      <div className="flex py-2 place-content-end">
+        <LoadingButton
+          className="mt-2"
+          type="submit"
+          onClick={form.handleSubmit(onSubmit)}
+          loading={loading}
+        >
+          Crear
+        </LoadingButton>
+      </div>
     </>
   );
 };

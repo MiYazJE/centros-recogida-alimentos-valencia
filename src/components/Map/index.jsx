@@ -1,14 +1,25 @@
 import { Marker, Popup, TileLayer, useMap, useMapEvents } from 'react-leaflet';
 import NewSiteForm from '../NewSiteForm';
 import { useState, useRef, useEffect } from 'react';
-import { useSites } from '@/hooks/useSites';
+import { useSiteMutation, useSites } from '@/hooks/useSites';
 
-export const MapLogic = ({ isSelecting }) => {
+const DEFAULT_MARKET_PAIPORTA = { lat: 0, lng: 0 };
+
+export const MapLogic = ({ setIsSelecting, isSelecting }) => {
   const query = useSites();
   const map = useMap();
 
-  const [selectedPosition, setSelectedPosition] = useState({ lat: 0, lng: 0 });
+  const [selectedPosition, setSelectedPosition] = useState(
+    DEFAULT_MARKET_PAIPORTA
+  );
   const popupRef = useRef();
+
+  const callbackOnSuccess = () => {
+    setSelectedPosition(DEFAULT_MARKET_PAIPORTA);
+    setIsSelecting(false);
+  };
+
+  const mutation = useSiteMutation({ callbackOnSuccess });
 
   const MapClickHandler = () => {
     useMapEvents({
@@ -25,6 +36,10 @@ export const MapLogic = ({ isSelecting }) => {
     }
   }, [selectedPosition, map]);
 
+  const handleCreateNewSite = (site) => {
+    mutation.mutate(site);
+  };
+
   return (
     <>
       <TileLayer
@@ -35,14 +50,19 @@ export const MapLogic = ({ isSelecting }) => {
       {isSelecting && selectedPosition ? (
         <Marker position={selectedPosition}>
           <Popup ref={popupRef}>
-            <NewSiteForm open />
+            <NewSiteForm
+              open
+              onSubmit={handleCreateNewSite}
+              position={selectedPosition}
+              loading={mutation.isPending}
+            />
           </Popup>
         </Marker>
       ) : null}
       {query.data?.map((marker) => (
         <Marker
           key={marker.id}
-          position={[marker.location.lat, marker.location.lon]}
+          position={[marker.location.lat, marker.location.lng]}
         >
           <Popup>
             <h2 className="font-bold">{marker.title}</h2>
@@ -52,6 +72,12 @@ export const MapLogic = ({ isSelecting }) => {
                 <strong>Horario:</strong> {marker?.hours?.trim()}
               </p>
             ) : null}
+            <a
+              href={`http://maps.google.com/maps?z=12&t=m&q=loc:${marker.location.lat}+${marker.location.lng}`}
+              target="__blank"
+            >
+              ¿Cómo llegar?
+            </a>
           </Popup>
         </Marker>
       ))}

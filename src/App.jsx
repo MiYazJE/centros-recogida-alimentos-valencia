@@ -29,9 +29,9 @@ function App() {
         zoom={12}
         zoomControl={true}
         scrollWheelZoom={true}
-        className="h-96 w-full z-10"
+        className="h-[600px] w-full z-10"
       >
-        <MapLogic isSelecting={isSelecting} />
+        <MapLogic isSelecting={isSelecting} setIsSelecting={setIsSelecting} />
       </MapContainer>
     </div>
   );

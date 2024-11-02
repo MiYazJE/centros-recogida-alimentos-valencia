@@ -7,6 +7,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import './index.css';
 import 'leaflet/dist/leaflet.css';
 import './services/supabase.js';
+import { Toaster } from './components/ui/toaster.jsx';
 
 const client = new QueryClient();
 
@@ -15,6 +16,7 @@ createRoot(document.getElementById('root')).render(
     <QueryClientProvider client={client}>
       <App />
       <ReactQueryDevtools initialIsOpen={false} />
+      <Toaster />
     </QueryClientProvider>
   </StrictMode>
 );
