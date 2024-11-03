@@ -49,13 +49,10 @@ export const PrivacyPolicyModal = ({ isOpen, onClose }) => {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
         className={"lg:max-w-screen-lg overflow-y-scroll max-h-screen"}
-        style={{
-          minWidth: "60rem",
-        }}
       >
         <DialogHeader>
           <DialogTitle className="pb-3">Política de privacidad</DialogTitle>
-          <ol type="1" className="list-inside list-decimal space-y-5">
+          <ol type="1" className="list-inside list-decimal space-y-3 text-left">
             {POLICY.map((section, index) => (
               <li key={index}>
                 <span className="font-bold">{section.title}</span>
