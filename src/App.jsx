@@ -30,7 +30,7 @@ function App() {
         zoom={12}
         zoomControl={true}
         scrollWheelZoom={true}
-        className="h-[600px] w-full z-10"
+        className="h-[600px] w-full z-10 md:border-2 md:rounded md:border-gray-900"
       >
         <MapLogic isSelecting={isSelecting} setIsSelecting={setIsSelecting} />
       </MapContainer>

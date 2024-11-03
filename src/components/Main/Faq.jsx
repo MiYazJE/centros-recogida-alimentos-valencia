@@ -9,7 +9,7 @@ const FAQ_ITEMS = [
   {
     question: '¿Cómo puedes ayudar?',
     answer:
-      'Con esta plataforma, puedes conocer los puntos de recogida de alimentos y donaciones para ayudar a los afectados por las inundaciones en Valencia. Actualizamos regularmente la información sobre los lugares, horarios, y productos más necesarios para facilitar las donaciones y apoyo a las comunidades.',
+      'Con esta plataforma puedes conocer los puntos de recogida de alimentos y donaciones para ayudar a los afectados por las inundaciones en Valencia. Actualizamos regularmente la información sobre los lugares, horarios, y productos más necesarios para facilitar las donaciones y apoyo a las comunidades.',
   },
   {
     question: '¿Qué encontrarás en esta página?',
