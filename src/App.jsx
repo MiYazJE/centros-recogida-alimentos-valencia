@@ -13,11 +13,12 @@ function App() {
   return (
     <div className="container mx-auto md:p-4">
       <Main />
-      <div className="flex place-content-end w-full py-3">
+      <div className="flex place-content-center md:place-content-end w-full py-3">
         <LoadingButton
           variant={isSelecting ? 'outline' : undefined}
           onClick={() => setIsSelecting((prev) => !prev)}
           loading={isSelecting}
+          className="md:w-fit min-w-96"
         >
           {!isSelecting
             ? '+ Añade un punto de recogida'
