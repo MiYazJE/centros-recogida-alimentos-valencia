@@ -1,11 +1,14 @@
 import { useSiteMutation } from '@/hooks/useSites';
 import { ExternalLink } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { Marker, Popup, TileLayer, useMap, useMapEvents } from 'react-leaflet';
+import { Marker, Popup, TileLayer, useMap, useMapEvents, GeoJSON } from 'react-leaflet';
+import L from 'leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import NewSiteForm from '../NewSiteForm';
 import { Button } from '../ui/button';
 import { Chip } from '../ui/chip';
+import spainGeoJson from '../../data/map.json';
+import { DEFAULT_ZOOM, INITIAL_CORDS } from '@/enums';
 
 const DEFAULT_MARKET_PAIPORTA = { lat: 0, lng: 0 };
 
@@ -23,6 +26,15 @@ export const MapLogic = ({ setIsSelecting, isSelecting, query }) => {
   };
 
   const mutation = useSiteMutation({ callbackOnSuccess });
+
+  useEffect(() => {
+    if (!map.getCenter().equals(INITIAL_CORDS) || map.getZoom() !== DEFAULT_ZOOM) {
+      map.setView(INITIAL_CORDS, DEFAULT_ZOOM);
+    }
+    
+    const bounds = L.geoJSON(spainGeoJson).getBounds();
+    map.setMaxBounds(bounds);
+  }, [map]);
 
   const MapClickHandler = () => {
     useMapEvents({
@@ -62,6 +74,9 @@ export const MapLogic = ({ setIsSelecting, isSelecting, query }) => {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+      <GeoJSON data={spainGeoJson} style={() => ({
+        fillOpacity: 0,
+      })} />
       {isSelecting ? <MapClickHandler /> : null}
       {isSelecting && selectedPosition ? (
         <Marker position={selectedPosition}>
