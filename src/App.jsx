@@ -4,23 +4,28 @@ import { useState } from 'react';
 import LoadingButton from './components/LoadingButton';
 import { Main } from './components/Main';
 import { MapLogic } from './components/Map';
+import { useSites } from './hooks/useSites';
+import DotPattern from './components/ui/dot-pattern';
+import { cn } from './lib/utils';
 
 const INITIAL_CORDS = [39.43333, -0.41667];
 
-const BackDrop = () => {
+const BackDrop = ({onClick}) => {
   return (
-    <div className="z-20 bg-gray-600 bg-opacity-80 h-full absolute top-0 left-0 w-full" />
+    <div onClick={onClick} className="z-20 bg-gray-600 bg-opacity-80 h-full absolute top-0 left-0 w-full" />
   );
 };
 
 function App() {
   const [isSelecting, setIsSelecting] = useState(false);
+  const [selectedTags, setSelectedTags] = useState([]);
+  const query = useSites(selectedTags);
 
   return (
     <div className="relative">
-      {isSelecting ? <BackDrop /> : null}
+      {isSelecting ? <BackDrop onClick={() => setIsSelecting(false)} /> : null}
       <div className="container mx-auto md:p-4">
-        <Main />
+        <Main selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
         <div className="flex place-content-center md:place-content-end w-full py-3 z-30 relative">
           <LoadingButton
             variant={isSelecting ? 'outline' : undefined}
@@ -41,9 +46,17 @@ function App() {
           scrollWheelZoom={true}
           className="h-[600px] w-full z-30 relative md:border-2 md:rounded md:border-gray-900"
         >
-          <MapLogic isSelecting={isSelecting} setIsSelecting={setIsSelecting} />
+          <MapLogic isSelecting={isSelecting} setIsSelecting={setIsSelecting} query={query} />
         </MapContainer>
       </div>
+      <DotPattern
+        width={20}
+        height={20}
+        cx={1}
+        cy={1}
+        cr={0.4}
+        className={cn("[mask-image:linear-gradient(to bottom, #00000000, #000000ff)]")}
+      />
     </div>
   );
 }

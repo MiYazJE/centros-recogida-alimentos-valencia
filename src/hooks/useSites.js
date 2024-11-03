@@ -4,11 +4,11 @@ import { getActiveSites } from '../services/get-sites';
 import { createSite } from '@/services/create-site';
 import { useToast } from './use-toast';
 
-export const useSites = () => {
+export const useSites = (filters) => {
   const query = useQuery({
-    queryKey: ['sites'],
+    queryKey: ['sites', filters],
     queryFn: async () => {
-      return await getActiveSites();
+      return await getActiveSites(filters);
     },
   });
   return query;

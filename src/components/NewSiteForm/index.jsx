@@ -1,7 +1,7 @@
-import { useForm } from 'react-hook-form';
-import z from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Input } from '../ui/input';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import z from "zod";
+import LoadingButton from "../LoadingButton";
 import {
   Form,
   FormControl,
@@ -10,21 +10,24 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '../ui/form';
-import { Textarea } from '../ui/textarea';
-import LoadingButton from '../LoadingButton';
+} from "../ui/form";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { MultiSelect } from "../ui/multi-select";
+import { TAGS } from "@/enums";
 
 const schema = z.object({
   title: z
-    .string({ message: 'Este campo es requerido' })
-    .min(1, { message: 'Este campo es requerido' }),
-  address: z.string().default(''),
-  hours: z.string().default('-'),
+    .string({ message: "Este campo es requerido" })
+    .min(1, { message: "Este campo es requerido" }),
+  address: z.string().default(""),
+  hours: z.string().default("-"),
+  tags: z.array(z.string()).optional().default([]),
 });
 
 const NewSiteForm = ({ onSubmit, loading }) => {
   const form = useForm({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(schema)
   });
 
   return (
@@ -36,9 +39,13 @@ const NewSiteForm = ({ onSubmit, loading }) => {
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Título</FormLabel>
+                <FormLabel>Nombre</FormLabel>
                 <FormControl>
-                  <Input className="!mt-0" placeholder="Nombre del local" {...field} />
+                  <Input
+                    className="!mt-0"
+                    placeholder="Nombre del local"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -68,10 +75,35 @@ const NewSiteForm = ({ onSubmit, loading }) => {
               <FormItem>
                 <FormLabel>Horario</FormLabel>
                 <FormControl>
-                  <Input className="!mt-0" placeholder="Horario" {...field} />
+                  <Input
+                    className="!mt-0"
+                    placeholder="08:30 - 18:00, Todo el día, etc..."
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="tags"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Tipos de Ayuda Disponibles</FormLabel>
+                <FormControl>
+                  <MultiSelect
+                    className="!mt-0"
+                    options={TAGS}
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    placeholder="Selecciona una o varias"
+                    variant="inverted"
+                    maxCount={3}
+                  />
                 </FormControl>
                 <FormDescription>
-                  Ejemplos: "08:30 - 18:00", "Todo el día", etc...
+                  Selecciona los tipos de ayuda que se pueden encontrar en este punto
                 </FormDescription>
                 <FormMessage />
               </FormItem>
