@@ -28,13 +28,18 @@ export const MapLogic = ({ setIsSelecting, isSelecting, query, isFullscreen, set
   );
   const popupRef = useRef();
 
-  const toggleFullscreen = () => setIsFullscreen((prev) => !prev);
+  const toggleFullscreen = () => {
+    if (isFullscreen) {
+      setIsSelecting(false);
+    }
+    setIsFullscreen((prev) => !prev);
+  }
 
   const callbackOnSuccess = () => {
     setSelectedPosition(DEFAULT_MARKET_PAIPORTA);
     setIsSelecting(false);
   };
-  
+
  const mutation = useSiteMutation({ callbackOnSuccess });
 
   useEffect(() => {
