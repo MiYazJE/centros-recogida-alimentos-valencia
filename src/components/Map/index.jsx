@@ -2,6 +2,7 @@ import { Marker, Popup, TileLayer, useMap, useMapEvents } from 'react-leaflet';
 import NewSiteForm from '../NewSiteForm';
 import { useState, useRef, useEffect } from 'react';
 import { useSiteMutation, useSites } from '@/hooks/useSites';
+import MarkerClusterGroup from 'react-leaflet-cluster';
 
 const DEFAULT_MARKET_PAIPORTA = { lat: 0, lng: 0 };
 
@@ -59,28 +60,31 @@ export const MapLogic = ({ setIsSelecting, isSelecting }) => {
           </Popup>
         </Marker>
       ) : null}
-      {query.data?.map((marker) => (
-        <Marker
-          key={marker.id}
-          position={[marker.location.lat, marker.location.lng]}
-        >
-          <Popup>
-            <h2 className="font-bold">{marker.title}</h2>
-            <p>{marker.address}</p>
-            {marker?.hours?.trim() ? (
-              <p>
-                <strong>Horario:</strong> {marker?.hours?.trim()}
-              </p>
-            ) : null}
-            <a
-              href={`http://maps.google.com/maps?z=12&t=m&q=loc:${marker.location.lat}+${marker.location.lng}`}
-              target="__blank"
-            >
-              ¿Cómo llegar?
-            </a>
-          </Popup>
-        </Marker>
-      ))}
+
+      <MarkerClusterGroup chunkedLoading>
+        {query.data?.map((marker) => (
+          <Marker
+            key={marker.id}
+            position={[marker.location.lat, marker.location.lng]}
+          >
+            <Popup>
+              <h2 className="font-bold">{marker.title}</h2>
+              <p>{marker.address}</p>
+              {marker?.hours?.trim() ? (
+                <p>
+                  <strong>Horario:</strong> {marker?.hours?.trim()}
+                </p>
+              ) : null}
+              <a
+                href={`http://maps.google.com/maps?z=12&t=m&q=loc:${marker.location.lat}+${marker.location.lng}`}
+                target="__blank"
+              >
+                ¿Cómo llegar?
+              </a>
+            </Popup>
+          </Marker>
+        ))}
+      </MarkerClusterGroup>
     </>
   );
 };
