@@ -8,6 +8,8 @@ import { useSites } from "./hooks/useSites";
 import DotPattern from "./components/ui/dot-pattern";
 import { cn } from "./lib/utils";
 import { DEFAULT_ZOOM, INITIAL_CORDS } from "./enums";
+import { Footer } from './components/Footer';
+import { PrivacyPolicyModal } from './components/Footer/PrivacyPolicyModal';
 
 
 const BackDrop = ({ onClick }) => {
@@ -22,8 +24,9 @@ const BackDrop = ({ onClick }) => {
 function App() {
   const [isSelecting, setIsSelecting] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [openPrivacyModal, setOpenPrivacyModal] = useState(false);
   const query = useSites(selectedTags);
-
+  console.log(openPrivacyModal)
   return (
     <div className="relative">
       {isSelecting ? <BackDrop onClick={() => setIsSelecting(false)} /> : null}
@@ -61,6 +64,7 @@ function App() {
             />
           </MapContainer>
         </div>
+        <Footer openModal={() => setOpenPrivacyModal(true)} />
       </div>
       <DotPattern
         width={20}
@@ -72,6 +76,7 @@ function App() {
           "[mask-image:linear-gradient(to bottom, #00000000, #000000ff)]"
         )}
       />
+      <PrivacyPolicyModal isOpen={openPrivacyModal} onClose={() => setOpenPrivacyModal(false)} />
     </div>
   );
 }

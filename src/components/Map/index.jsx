@@ -8,7 +8,7 @@ import NewSiteForm from '../NewSiteForm';
 import { Button } from '../ui/button';
 import { Chip } from '../ui/chip';
 import spainGeoJson from '../../data/map.json';
-import { DEFAULT_ZOOM, INITIAL_CORDS } from '@/enums';
+import { DEFAULT_ZOOM, INITIAL_CORDS, TAGS } from '@/enums';
 
 const DEFAULT_MARKET_PAIPORTA = { lat: 0, lng: 0 };
 
@@ -115,7 +115,7 @@ export const MapLogic = ({ setIsSelecting, isSelecting, query }) => {
                   <div className="flex gap-2 flex-wrap">
                     {marker.tags?.length
                       ? marker.tags.map((tag) => (
-                          <Chip key={tag} label={tag} selected />
+                          <Chip key={tag} label={TAGS.find(({ value }) => value === tag)?.label} selected />
                         ))
                       : null}
                   </div>
