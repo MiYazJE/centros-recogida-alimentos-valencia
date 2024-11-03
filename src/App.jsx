@@ -26,7 +26,7 @@ function App() {
   const [selectedTags, setSelectedTags] = useState([]);
   const [openPrivacyModal, setOpenPrivacyModal] = useState(false);
   const query = useSites(selectedTags);
-  console.log(openPrivacyModal)
+
   return (
     <div className="relative">
       {isSelecting ? <BackDrop onClick={() => setIsSelecting(false)} /> : null}

@@ -1,18 +1,27 @@
-import { useSiteMutation } from '@/hooks/useSites';
-import { ExternalLink } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
-import { Marker, Popup, TileLayer, useMap, useMapEvents, GeoJSON } from 'react-leaflet';
-import L from 'leaflet';
-import MarkerClusterGroup from 'react-leaflet-cluster';
-import NewSiteForm from '../NewSiteForm';
-import { Button } from '../ui/button';
-import { Chip } from '../ui/chip';
-import spainGeoJson from '../../data/map.json';
-import { DEFAULT_ZOOM, INITIAL_CORDS, TAGS } from '@/enums';
+import { useSiteMutation } from "@/hooks/useSites";
+import { ExternalLink } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import {
+  Marker,
+  Popup,
+  TileLayer,
+  useMap,
+  useMapEvents,
+  GeoJSON,
+} from "react-leaflet";
+import L from "leaflet";
+import MarkerClusterGroup from "react-leaflet-cluster";
+import NewSiteForm from "../NewSiteForm";
+import { Button } from "../ui/button";
+import { Chip } from "../ui/chip";
+import spainGeoJson from "../../data/map.json";
+import { DEFAULT_ZOOM, INITIAL_CORDS, TAGS } from "@/enums";
+import LoadingButton from "../LoadingButton";
 
 const DEFAULT_MARKET_PAIPORTA = { lat: 0, lng: 0 };
 
 export const MapLogic = ({ setIsSelecting, isSelecting, query }) => {
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const map = useMap();
 
   const [selectedPosition, setSelectedPosition] = useState(
@@ -25,10 +34,32 @@ export const MapLogic = ({ setIsSelecting, isSelecting, query }) => {
     setIsSelecting(false);
   };
 
+  const handleFullscreenToggle = () => {
+    if (!document.fullscreenElement) {
+      map.getContainer().requestFullscreen();
+    } else {
+      document.exitFullscreen();
+      setIsSelecting(false);
+    }
+  };
+
   const mutation = useSiteMutation({ callbackOnSuccess });
 
   useEffect(() => {
-    if (!map.getCenter().equals(INITIAL_CORDS) || map.getZoom() !== DEFAULT_ZOOM) {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(Boolean(document.fullscreenElement));
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () =>
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+  }, []);
+
+  useEffect(() => {
+    if (
+      !map.getCenter().equals(INITIAL_CORDS) ||
+      map.getZoom() !== DEFAULT_ZOOM
+    ) {
       map.setView(INITIAL_CORDS, DEFAULT_ZOOM);
     }
 
@@ -65,8 +96,8 @@ export const MapLogic = ({ setIsSelecting, isSelecting, query }) => {
     const url = `https://maps.google.com/maps?z=12&t=m&q=loc:${lat}+${lng}`;
 
     navigator.share({
-      title: 'Compartir punto de recogida',
-      text: 'Aquí está la ubicación en Google Maps:',
+      title: "Compartir punto de recogida",
+      text: "Aquí está la ubicación en Google Maps:",
       url,
     });
   };
@@ -77,9 +108,12 @@ export const MapLogic = ({ setIsSelecting, isSelecting, query }) => {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <GeoJSON data={spainGeoJson} style={() => ({
-        fillOpacity: 0,
-      })} />
+      <GeoJSON
+        data={spainGeoJson}
+        style={() => ({
+          fillOpacity: 0,
+        })}
+      />
       {isSelecting ? <MapClickHandler /> : null}
       {isSelecting && selectedPosition ? (
         <Marker position={selectedPosition}>
@@ -93,6 +127,25 @@ export const MapLogic = ({ setIsSelecting, isSelecting, query }) => {
           </Popup>
         </Marker>
       ) : null}
+      <Button
+        onClick={handleFullscreenToggle}
+        className="absolute top-4 right-4 z-[999] p-2 shadow-lg"
+      >
+        {isFullscreen ? "Salir" : "Pantalla completa"}
+      </Button>
+
+      {isFullscreen && (
+        <LoadingButton
+          variant={isSelecting ? "outline" : undefined}
+          onClick={() => setIsSelecting((prev) => !prev)}
+          loading={isSelecting}
+          className="md:w-fit min-w-96 absolute bottom-4 transform -translate-x-1/2 left-1/2  z-[999]"
+        >
+          {!isSelecting
+            ? "+ Añade un punto de recogida"
+            : "Selecciona un punto en el mapa"}
+        </LoadingButton>
+      )}
 
       <MarkerClusterGroup chunkedLoading>
         {query.data?.map((marker) => (
@@ -104,13 +157,13 @@ export const MapLogic = ({ setIsSelecting, isSelecting, query }) => {
               <div className="flex flex-col space-y-3">
                 <h2 className="font-bold">{marker.title}</h2>
                 <p>
-                  <span className="font-semibold">Dirección:</span>{' '}
+                  <span className="font-semibold">Dirección:</span>{" "}
                   {marker.address}
                 </p>
 
                 <p>
-                  <span className="font-semibold">Horario:</span>{' '}
-                  {marker?.hours?.trim() || '-'}
+                  <span className="font-semibold">Horario:</span>{" "}
+                  {marker?.hours?.trim() || "-"}
                 </p>
 
                 <div>
@@ -118,7 +171,13 @@ export const MapLogic = ({ setIsSelecting, isSelecting, query }) => {
                   <div className="flex gap-2 flex-wrap">
                     {marker.tags?.length
                       ? marker.tags.map((tag) => (
-                          <Chip key={tag} label={TAGS.find(({ value }) => value === tag)?.label} selected />
+                          <Chip
+                            key={tag}
+                            label={
+                              TAGS.find(({ value }) => value === tag)?.label
+                            }
+                            selected
+                          />
                         ))
                       : null}
                   </div>
@@ -130,7 +189,7 @@ export const MapLogic = ({ setIsSelecting, isSelecting, query }) => {
                     onClick={() =>
                       window.open(
                         `http://maps.google.com/maps?z=12&t=m&q=loc:${marker.location.lat}+${marker.location.lng}`,
-                        '__blank'
+                        "__blank"
                       )
                     }
                   >
