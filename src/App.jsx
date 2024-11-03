@@ -24,6 +24,7 @@ const BackDrop = ({ onClick }) => {
 function App() {
   const [isSelecting, setIsSelecting] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const [openPrivacyModal, setOpenPrivacyModal] = useState(false);
   const query = useSites(selectedTags);
 
@@ -46,20 +47,22 @@ function App() {
         </div>
 
         <div
-          className={` w-full z-30 relative md:border-2 md:rounded ${
+          className={`w-full z-30 relative md:border-2 md:rounded ${
             isSelecting ? "border-gray-700" : "border-gray-200"
-          }`}
+          } ${isFullscreen ? "fullscreen-map" : "h-[600px]"}`}
         >
           <MapContainer
             center={INITIAL_CORDS}
             zoom={DEFAULT_ZOOM}
             zoomControl={true}
             scrollWheelZoom={true}
-            className="h-[600px] w-full"
+            className={`h-full w-full`}
           >
             <MapLogic
               isSelecting={isSelecting}
               setIsSelecting={setIsSelecting}
+              isFullscreen={isFullscreen}
+              setIsFullscreen={setIsFullscreen}
               query={query}
             />
           </MapContainer>

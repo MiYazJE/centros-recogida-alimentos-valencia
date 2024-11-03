@@ -20,8 +20,7 @@ import LoadingButton from "../LoadingButton";
 
 const DEFAULT_MARKET_PAIPORTA = { lat: 0, lng: 0 };
 
-export const MapLogic = ({ setIsSelecting, isSelecting, query }) => {
-  const [isFullscreen, setIsFullscreen] = useState(false);
+export const MapLogic = ({ setIsSelecting, isSelecting, query, isFullscreen, setIsFullscreen }) => {
   const map = useMap();
 
   const [selectedPosition, setSelectedPosition] = useState(
@@ -29,31 +28,18 @@ export const MapLogic = ({ setIsSelecting, isSelecting, query }) => {
   );
   const popupRef = useRef();
 
+  const toggleFullscreen = () => setIsFullscreen((prev) => !prev);
+
   const callbackOnSuccess = () => {
     setSelectedPosition(DEFAULT_MARKET_PAIPORTA);
     setIsSelecting(false);
   };
-
-  const handleFullscreenToggle = () => {
-    if (!document.fullscreenElement) {
-      map.getContainer().requestFullscreen();
-    } else {
-      document.exitFullscreen();
-      setIsSelecting(false);
-    }
-  };
-
-  const mutation = useSiteMutation({ callbackOnSuccess });
+  
+ const mutation = useSiteMutation({ callbackOnSuccess });
 
   useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(Boolean(document.fullscreenElement));
-    };
-
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
-    return () =>
-      document.removeEventListener("fullscreenchange", handleFullscreenChange);
-  }, []);
+    map.invalidateSize();
+  }, [isFullscreen, map]);
 
   useEffect(() => {
     if (
@@ -128,7 +114,7 @@ export const MapLogic = ({ setIsSelecting, isSelecting, query }) => {
         </Marker>
       ) : null}
       <Button
-        onClick={handleFullscreenToggle}
+        onClick={toggleFullscreen}
         className="absolute top-4 right-4 z-[999] p-2 shadow-lg"
       >
         {isFullscreen ? "Salir" : "Pantalla completa"}
