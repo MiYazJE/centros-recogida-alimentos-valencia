@@ -1,15 +1,14 @@
-import { Marker, Popup, TileLayer, useMap, useMapEvents } from 'react-leaflet';
-import NewSiteForm from '../NewSiteForm';
-import { useState, useRef, useEffect } from 'react';
-import { useSiteMutation, useSites } from '@/hooks/useSites';
-import MarkerClusterGroup from 'react-leaflet-cluster';
+import { useSiteMutation } from '@/hooks/useSites';
 import { ExternalLink } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Marker, Popup, TileLayer, useMap, useMapEvents } from 'react-leaflet';
+import MarkerClusterGroup from 'react-leaflet-cluster';
+import NewSiteForm from '../NewSiteForm';
 import { Button } from '../ui/button';
 
 const DEFAULT_MARKET_PAIPORTA = { lat: 0, lng: 0 };
 
-export const MapLogic = ({ setIsSelecting, isSelecting }) => {
-  const query = useSites();
+export const MapLogic = ({ setIsSelecting, isSelecting, query }) => {
   const map = useMap();
 
   const [selectedPosition, setSelectedPosition] = useState(
@@ -65,7 +64,7 @@ export const MapLogic = ({ setIsSelecting, isSelecting }) => {
       {isSelecting ? <MapClickHandler /> : null}
       {isSelecting && selectedPosition ? (
         <Marker position={selectedPosition}>
-          <Popup ref={popupRef}>
+          <Popup className="w-[350px]" ref={popupRef}>
             <NewSiteForm
               open
               onSubmit={handleCreateNewSite}
