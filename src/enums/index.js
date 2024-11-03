@@ -10,3 +10,7 @@ export const TAGS = [
   { value: "higiene", label: "Higiene personal" },
   { value: "herramientas", label: "Herramientas" },
 ]
+
+export const INITIAL_CORDS = [39.43333, -0.41667];
+
+export const DEFAULT_ZOOM = 12;
