@@ -5,6 +5,7 @@ import { Marker, Popup, TileLayer, useMap, useMapEvents } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import NewSiteForm from '../NewSiteForm';
 import { Button } from '../ui/button';
+import { Chip } from '../ui/chip';
 
 const DEFAULT_MARKET_PAIPORTA = { lat: 0, lng: 0 };
 
@@ -82,32 +83,51 @@ export const MapLogic = ({ setIsSelecting, isSelecting, query }) => {
             position={[marker.location.lat, marker.location.lng]}
           >
             <Popup>
-              <h2 className="font-bold">{marker.title}</h2>
-              <p>{marker.address}</p>
-              {marker?.hours?.trim() ? (
+              <div className="flex flex-col space-y-3">
+                <h2 className="font-bold">{marker.title}</h2>
                 <p>
-                  <strong>Horario:</strong> {marker?.hours?.trim()}
+                  <span className="font-semibold">Dirección:</span>{' '}
+                  {marker.address}
                 </p>
-              ) : null}
 
-              <div className="flex intems-center justify-between gap-2">
-                <Button
-                  variant="link"
-                  onClick={() =>
-                    window.open(
-                      `http://maps.google.com/maps?z=12&t=m&q=loc:${marker.location.lat}+${marker.location.lng}`,
-                      '__blank'
-                    )
-                  }
-                >
-                  ¿Cómo llegar?
-                </Button>
-                {navigator.share ? (
-                  <Button variant="outline" onClick={() => handleShare(marker)}>
-                    Compartir
-                    <ExternalLink />
+                <p>
+                  <span className="font-semibold">Horario:</span>{' '}
+                  {marker?.hours?.trim() || '-'}
+                </p>
+
+                <div>
+                  <p className="!mt-0 !mb-1 font-semibold">Categorías:</p>
+                  <div className="flex gap-2 flex-wrap">
+                    {marker.tags?.length
+                      ? marker.tags.map((tag) => (
+                          <Chip key={tag} label={tag} selected />
+                        ))
+                      : null}
+                  </div>
+                </div>
+
+                <div className="flex intems-center justify-between gap-2">
+                  <Button
+                    variant="link"
+                    onClick={() =>
+                      window.open(
+                        `http://maps.google.com/maps?z=12&t=m&q=loc:${marker.location.lat}+${marker.location.lng}`,
+                        '__blank'
+                      )
+                    }
+                  >
+                    ¿Cómo llegar?
                   </Button>
-                ) : null}
+                  {navigator.share ? (
+                    <Button
+                      variant="outline"
+                      onClick={() => handleShare(marker)}
+                    >
+                      Compartir
+                      <ExternalLink />
+                    </Button>
+                  ) : null}
+                </div>
               </div>
             </Popup>
           </Marker>
