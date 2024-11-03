@@ -24,7 +24,7 @@ export const useSiteMutation = ({ callbackOnSuccess }) => {
     onSuccess: () => {
       toast({
         variant: 'success',
-        title: 'Punto de recogida creado!',
+        title: '¡Punto de recogida creado correctamente!',
         description:
           'Gracias por la aportación. Lo verificaremos con la mayor brevedad posible.',
       });
@@ -33,7 +33,7 @@ export const useSiteMutation = ({ callbackOnSuccess }) => {
     onError: () =>
       toast({
         variant: 'destructive',
-        description: 'Lo sentimos, han surgido problemas. Inténtelo más tarde',
+        description: 'Lo sentimos, han surgido problemas. Inténtelo más tarde.',
       }),
   });
   return mutation;
