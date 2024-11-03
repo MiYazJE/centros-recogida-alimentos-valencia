@@ -14,4 +14,4 @@ export const TAGS = [
 
 export const INITIAL_CORDS = [39.43333, -0.41667];
 
-export const DEFAULT_ZOOM = 12;
+export const DEFAULT_ZOOM = 11;
