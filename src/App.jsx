@@ -34,15 +34,24 @@ function App() {
           </LoadingButton>
         </div>
 
-        <MapContainer
-          center={INITIAL_CORDS}
-          zoom={12}
-          zoomControl={true}
-          scrollWheelZoom={true}
-          className="h-[600px] w-full z-30 relative md:border-2 md:rounded md:border-gray-900"
+        <div
+          className={` w-full z-30 relative md:border-2 md:rounded ${
+            isSelecting ? 'border-gray-700' : 'border-gray-200'
+          }`}
         >
-          <MapLogic isSelecting={isSelecting} setIsSelecting={setIsSelecting} />
-        </MapContainer>
+          <MapContainer
+            center={INITIAL_CORDS}
+            zoom={12}
+            zoomControl={true}
+            scrollWheelZoom={true}
+            className="h-[600px] w-full"
+          >
+            <MapLogic
+              isSelecting={isSelecting}
+              setIsSelecting={setIsSelecting}
+            />
+          </MapContainer>
+        </div>
       </div>
     </div>
   );
