@@ -59,7 +59,7 @@ export const Faq = () => {
         {FAQ_ITEMS.map((item, index) => (
           <AccordionItem key={index} value={index.toString()}>
             <AccordionTrigger className="font-bold">
-              {item.question}
+              <span className="text-left">{item.question}</span>
             </AccordionTrigger>
             <AccordionContent>{item.answer}</AccordionContent>
           </AccordionItem>
