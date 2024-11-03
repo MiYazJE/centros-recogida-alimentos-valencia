@@ -31,9 +31,12 @@ export const MapLogic = ({ setIsSelecting, isSelecting, query }) => {
     if (!map.getCenter().equals(INITIAL_CORDS) || map.getZoom() !== DEFAULT_ZOOM) {
       map.setView(INITIAL_CORDS, DEFAULT_ZOOM);
     }
-    
+
     const bounds = L.geoJSON(spainGeoJson).getBounds();
-    map.setMaxBounds(bounds);
+    const padding = 0.2;
+    const expandedBounds = bounds.pad(padding);
+
+    map.setMaxBounds(expandedBounds);
   }, [map]);
 
   const MapClickHandler = () => {
