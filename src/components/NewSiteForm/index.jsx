@@ -38,7 +38,7 @@ const NewSiteForm = ({ onSubmit, loading }) => {
               <FormItem>
                 <FormLabel>Título</FormLabel>
                 <FormControl>
-                  <Input className="!mt-0" placeholder="Título" {...field} />
+                  <Input className="!mt-0" placeholder="Nombre del local" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -53,7 +53,7 @@ const NewSiteForm = ({ onSubmit, loading }) => {
                 <FormControl>
                   <Textarea
                     className="!mt-0"
-                    placeholder="Dirección"
+                    placeholder="Dirección exacta, nombre de la calle, número, etc..."
                     {...field}
                   />
                 </FormControl>

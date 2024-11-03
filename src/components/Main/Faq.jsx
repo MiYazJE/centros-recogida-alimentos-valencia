@@ -29,6 +29,11 @@ const FAQ_ITEMS = [
       </ul>
     ),
   },
+  {
+    question: "¿Cómo añadir un nuevo punto de recogida?",
+    answer:
+      "Si conoces un lugar que no está en el mapa, puedes añadirlo haciendo clic en el botón 'Añade un punto de recogida'. Luego, selecciona un lugar en el mapa y completa el formulario con la información necesaria.",
+  }
 ];
 
 export const Faq = () => {
