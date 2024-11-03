@@ -3,6 +3,8 @@ import NewSiteForm from '../NewSiteForm';
 import { useState, useRef, useEffect } from 'react';
 import { useSiteMutation, useSites } from '@/hooks/useSites';
 import MarkerClusterGroup from 'react-leaflet-cluster';
+import { ExternalLink } from 'lucide-react';
+import { Button } from '../ui/button';
 
 const DEFAULT_MARKET_PAIPORTA = { lat: 0, lng: 0 };
 
@@ -41,6 +43,19 @@ export const MapLogic = ({ setIsSelecting, isSelecting }) => {
     mutation.mutate({ ...site, location: selectedPosition });
   };
 
+  const handleShare = (marker) => {
+    const {
+      location: { lng, lat },
+    } = marker;
+    const url = `https://maps.google.com/maps?z=12&t=m&q=loc:${lat}+${lng}`;
+
+    navigator.share({
+      title: 'Compartir punto de recogida',
+      text: 'Aquí está la ubicación en Google Maps:',
+      url,
+    });
+  };
+
   return (
     <>
       <TileLayer
@@ -75,12 +90,26 @@ export const MapLogic = ({ setIsSelecting, isSelecting }) => {
                   <strong>Horario:</strong> {marker?.hours?.trim()}
                 </p>
               ) : null}
-              <a
-                href={`http://maps.google.com/maps?z=12&t=m&q=loc:${marker.location.lat}+${marker.location.lng}`}
-                target="__blank"
-              >
-                ¿Cómo llegar?
-              </a>
+
+              <div className="flex intems-center justify-between gap-2">
+                <Button
+                  variant="link"
+                  onClick={() =>
+                    window.open(
+                      `http://maps.google.com/maps?z=12&t=m&q=loc:${marker.location.lat}+${marker.location.lng}`,
+                      '__blank'
+                    )
+                  }
+                >
+                  ¿Cómo llegar?
+                </Button>
+                {navigator.share ? (
+                  <Button variant="outline" onClick={() => handleShare(marker)}>
+                    Compartir
+                    <ExternalLink />
+                  </Button>
+                ) : null}
+              </div>
             </Popup>
           </Marker>
         ))}
