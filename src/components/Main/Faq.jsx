@@ -3,18 +3,18 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
+} from '@/components/ui/accordion';
 
 const FAQ_ITEMS = [
   {
-    question: "¿Cómo puedes ayudar?",
+    question: '¿Cómo puedes ayudar?',
     answer:
-      "Con esta plataforma, puedes conocer los puntos de recogida de alimentos y donaciones para ayudar a los afectados por las inundaciones en Valencia. Actualizamos regularmente la información sobre los lugares, horarios, y productos más necesarios para facilitar las donaciones y apoyo a las comunidades.",
+      'Con esta plataforma, puedes conocer los puntos de recogida de alimentos y donaciones para ayudar a los afectados por las inundaciones en Valencia. Actualizamos regularmente la información sobre los lugares, horarios, y productos más necesarios para facilitar las donaciones y apoyo a las comunidades.',
   },
   {
-    question: "¿Qué encontrarás en esta página?",
+    question: '¿Qué encontrarás en esta página?',
     answer: (
-      <ul>
+      <ul className="list-inside list-disc space-y-2 ml-2">
         <li>
           <b>Direcciones</b> de los puntos de recogida de alimentos y otros
           insumos.
@@ -30,24 +30,37 @@ const FAQ_ITEMS = [
     ),
   },
   {
-    question: "¿Cómo añadir un nuevo punto de recogida?",
-    answer:
-      "Si conoces un lugar que no está en el mapa, puedes añadirlo haciendo clic en el botón 'Añade un punto de recogida'. Luego, selecciona un lugar en el mapa y completa el formulario con la información necesaria.",
-  }
+    question: '¿Cómo añadir un nuevo punto de recogida?',
+    answer: (
+      <div className="space-y-2">
+        <p>Si conoces un lugar que no está en el mapa, puedes añadirlo:</p>
+        <ol className="list-inside list-decimal space-y-1 ml-3">
+          <li>
+            Haciendo clic en el botón{' '}
+            <i className="underline">Añade un punto de recogida.</i>
+          </li>
+          <li>Selecciona un lugar en el mapa.</li>
+          <li>Completa el formulario con la información necesaria.</li>
+        </ol>
+        <p>
+          Después lo verificaremos con la mayor brevedad posible y en los
+          próximos minutos será visible por todos, esto lo hacemos para asegurar
+          una integridad en los datos.
+        </p>
+      </div>
+    ),
+  },
 ];
 
 export const Faq = () => {
   return (
     <div className="px-4 mx-auto max-w-screen-sm py-8 md:px-8 space-y-3">
-      <h2 className="text-xl text-center">Preguntas Frecuentes</h2>
-      <Accordion
-        className="space-y-2"
-        type="single"
-        collapsible
-      >
+      <Accordion className="space-y-2" type="single" collapsible>
         {FAQ_ITEMS.map((item, index) => (
           <AccordionItem key={index} value={index.toString()}>
-            <AccordionTrigger className="font-bold">{item.question}</AccordionTrigger>
+            <AccordionTrigger className="font-bold">
+              {item.question}
+            </AccordionTrigger>
             <AccordionContent>{item.answer}</AccordionContent>
           </AccordionItem>
         ))}
