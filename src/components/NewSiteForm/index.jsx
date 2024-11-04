@@ -33,7 +33,7 @@ const NewSiteForm = ({ onSubmit, loading, address = "" }) => {
 
   useEffect(() => {
     form.reset({
-      address: address,
+      address,
     });
   } , [address, form]);
 
