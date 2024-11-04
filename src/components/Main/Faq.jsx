@@ -39,7 +39,7 @@ const FAQ_ITEMS = [
             Haciendo clic en el botón{' '}
             <i className="underline">Añade un punto de recogida.</i>
           </li>
-          <li>Selecciona un lugar en el mapa.</li>
+          <li>Utiliza el buscador o mueve el mapa para seleccionar la ubicación.</li>
           <li>Completa el formulario con la información necesaria.</li>
         </ol>
         <p>

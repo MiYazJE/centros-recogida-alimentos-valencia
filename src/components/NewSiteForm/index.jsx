@@ -15,6 +15,7 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { MultiSelect } from "../ui/multi-select";
 import { TAGS } from "@/enums";
+import { useEffect } from "react";
 
 const schema = z.object({
   title: z
@@ -25,15 +26,21 @@ const schema = z.object({
   tags: z.array(z.string()).optional().default([]),
 });
 
-const NewSiteForm = ({ onSubmit, loading }) => {
+const NewSiteForm = ({ onSubmit, loading, address = "" }) => {
   const form = useForm({
-    resolver: zodResolver(schema)
+    resolver: zodResolver(schema),
   });
+
+  useEffect(() => {
+    form.reset({
+      address: address,
+    });
+  } , [address, form]);
 
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 max-h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-gray-500 pr-2">
           <FormField
             control={form.control}
             name="title"
