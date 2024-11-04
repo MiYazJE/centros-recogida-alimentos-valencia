@@ -1,3 +1,4 @@
+import 'leaflet-geosearch/dist/geosearch.css';
 import { useSiteMutation } from "@/hooks/useSites";
 import { ExternalLink } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -17,15 +18,19 @@ import { Chip } from "../ui/chip";
 import spainGeoJson from "../../data/map.json";
 import { DEFAULT_ZOOM, INITIAL_CORDS, TAGS } from "@/enums";
 import LoadingButton from "../LoadingButton";
+import { GeoSearchControl, GoogleProvider} from "leaflet-geosearch";
+
+const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 const DEFAULT_MARKET_PAIPORTA = { lat: 0, lng: 0 };
 
 export const MapLogic = ({ setIsSelecting, isSelecting, query, isFullscreen, setIsFullscreen }) => {
   const map = useMap();
-
+  const providerRef = useRef(null);
   const [selectedPosition, setSelectedPosition] = useState(
     DEFAULT_MARKET_PAIPORTA
   );
+  const [searchResultAddress, setSearchResultAddress] = useState("");
   const popupRef = useRef();
 
   const toggleFullscreen = () => {
@@ -61,6 +66,53 @@ export const MapLogic = ({ setIsSelecting, isSelecting, query, isFullscreen, set
     map.setMaxBounds(expandedBounds);
   }, [map]);
 
+  useEffect(() => {
+    providerRef.current = new GoogleProvider({
+      apiKey: GOOGLE_MAPS_API_KEY,
+      language: "es",
+      region: "ES",
+      params: {
+        country: "ES",
+      },
+    });
+    const searchControl = new GeoSearchControl({
+      provider: providerRef.current,
+      style: "button",
+      showMarker: false,
+      retainZoomLevel: false,
+      animateZoom: true,
+      autoClose: true,
+      searchLabel: "Buscar dirección",
+      keepResult: false,
+    });
+
+    map.addControl(searchControl);
+    map.on("geosearch/showlocation", (e) => {
+      if (isSelecting) {
+        setSelectedPosition({ lat: e.location.y, lng: e.location.x });
+      }
+    });
+    return () => map.removeControl(searchControl);
+  }, [map, isSelecting]);
+
+  const fetchAddress = async (latlng) => {
+    if (!providerRef.current) return;
+
+    const response = await providerRef.current.search({
+      query: `${latlng.lat}, ${latlng.lng}`,
+    });
+
+    if (response && response.length > 0) {
+      setSearchResultAddress(response[0].label);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedPosition && isSelecting) {
+      fetchAddress(selectedPosition);
+    }
+  }, [selectedPosition, isSelecting]);
+
   const MapClickHandler = () => {
     useMapEvents({
       click(e) {
@@ -84,7 +136,7 @@ export const MapLogic = ({ setIsSelecting, isSelecting, query, isFullscreen, set
     const {
       location: { lng, lat },
     } = marker;
-    const url = `https://maps.google.com/maps?z=12&t=m&q=loc:${lat}+${lng}`;
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
 
     navigator.share({
       title: "Compartir punto de recogida",
@@ -113,6 +165,7 @@ export const MapLogic = ({ setIsSelecting, isSelecting, query, isFullscreen, set
               open
               onSubmit={handleCreateNewSite}
               position={selectedPosition}
+              address={searchResultAddress}
               loading={mutation.isPending}
             />
           </Popup>
@@ -179,7 +232,7 @@ export const MapLogic = ({ setIsSelecting, isSelecting, query, isFullscreen, set
                     variant="link"
                     onClick={() =>
                       window.open(
-                        `http://maps.google.com/maps?z=12&t=m&q=loc:${marker.location.lat}+${marker.location.lng}`,
+                        `https://www.google.com/maps/dir/?api=1&destination=${marker.location.lat},${marker.location.lng}`,
                         "__blank"
                       )
                     }
